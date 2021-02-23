@@ -1,0 +1,123 @@
+<html>
+<head>
+
+<title>Weekend Gamers</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js">
+	
+</script>
+</head>
+<body onload="init()">
+
+	<h2>Add your availability</h2>
+
+	<div class="container">
+		User : <input type="text" id="name"> From : <input type="datetime-local" id="availableFrom" /> Till : <input type="datetime-local"
+			id="availableTill" /> <input type="button" id="btnSubmit" onclick="submitAvailability()" value="Add" />
+	</div>
+
+	<h2>Future Schedule</h2>
+	<p id="availabilityDetailsTable" />
+
+
+
+	<script>
+		// Initialize
+		function init() {
+			getAvailability()
+		}
+
+		function getAvailability() {
+
+			console.log("Refreshing Availability")
+
+			let result = document.querySelector('.result');
+
+			let xhr = new XMLHttpRequest();
+			let url = "/api/availability"
+
+			var availabilityDetails = ""
+			var availabilityDetailsTable = "<table border='1' cellspacing='0' cellpadding='10' width='700'>"
+			+"<tr style='background-color:#D3D3D3'> <td> Name </td> <td> From </td> <td> Till </td> </tr>";
+
+			xhr.open("GET", url, true);
+
+			// Create a state change callback 
+			xhr.onreadystatechange = function() {
+				if (xhr.readyState === 4 && xhr.status === 200) {
+					var obj = JSON.parse(this.responseText);
+					console.log(obj);
+
+					for (index = 0; index < obj.length; index++) {
+
+						var dateFrom = new Date(obj[index].availableFrom)
+								.toLocaleString()
+						var dateTill = new Date(obj[index].availableTill)
+								.toLocaleString()
+
+						availabilityDetailsTable += "<tr>" + "<td>"
+								+ obj[index].name + "</td>" + "<td>" + dateFrom
+								+ "</td>" + "<td>" + dateTill + "</td>"
+								+ "</tr>"
+
+						availabilityDetails += obj[index].name
+								+ " playing from " + dateFrom + " till "
+								+ dateTill + "<br/>"
+					}
+
+					availabilityDetailsTable += "</table>"
+
+					console.log(availabilityDetails);
+					//document.getElementById('availabilityDetails').innerHTML = availabilityDetails;
+
+					console.log(availabilityDetailsTable);
+					document.getElementById('availabilityDetailsTable').innerHTML = availabilityDetailsTable;
+
+				}
+			};
+
+			// Sending data with the request 
+			xhr.send();
+		}
+
+		// Submit Availabillity
+		function submitAvailability() {
+
+			console.log("Submitting User")
+
+			let result = document.querySelector('.result');
+			var availableFrom = new Date(document
+					.getElementById("availableFrom").value).toISOString();
+			var availableTill = new Date(document
+					.getElementById("availableTill").value).toISOString();
+
+			// Creating a XHR object 
+			let xhr = new XMLHttpRequest();
+			let url = "/api/availability/";
+
+			// open a connection 
+			xhr.open("POST", url, true);
+
+			// Set the request header i.e. which type of content you are sending 
+			xhr.setRequestHeader("Content-Type", "application/json");
+
+			// Create a state change callback 
+			xhr.onreadystatechange = function() {
+				if (xhr.readyState === 4 && xhr.status === 200) {
+					getAvailability()
+				}
+			};
+
+			// Converting JSON data to string 
+			var data = JSON.stringify({
+				"name" : document.getElementById("name").value,
+				"availableFrom" : availableFrom,
+				"availableTill" : availableTill
+			});
+
+			// Sending data with the request 
+			xhr.send(data);
+		}
+	</script>
+
+</body>
+</html>
