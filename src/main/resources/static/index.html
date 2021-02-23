@@ -10,9 +10,18 @@
 
 	<h2>Add your availability</h2>
 
+
+
 	<div class="container">
-		User : <input type="text" id="name"> From : <input type="datetime-local" id="availableFrom" /> Till : <input type="datetime-local"
-			id="availableTill" /> <input type="button" id="btnSubmit" onclick="submitAvailability()" value="Add" />
+		User : <select id="name" style="width: 200px">
+			<option style="display: none"></option>
+			<option value="Harbola">Harbola</option>
+			<option value="Kshitij">Kshitij</option>
+			<option value="Rishu">Rishu</option>
+			<option value="Rithvik">Rithvik</option>
+			<option value="Yash">Yash</option>
+		</select>&nbsp;&nbsp; From : <input type="datetime-local" id="availableFrom" /> &nbsp;&nbsp;Till : <input type="datetime-local" id="availableTill" /> <input
+			type="button" id="btnSubmit" onclick="submitAvailability()" value="Add" />
 	</div>
 
 	<h2>Future Schedule</h2>
@@ -36,8 +45,8 @@
 			let url = "/api/availability"
 
 			var availabilityDetails = ""
-			var availabilityDetailsTable = "<table border='1' cellspacing='0' cellpadding='10' width='700'>"
-			+"<tr style='background-color:#D3D3D3'> <td> Name </td> <td> From </td> <td> Till </td> </tr>";
+			var availabilityDetailsTable = "<table border='1' cellspacing='0' cellpadding='10' width='825'>"
+					+ "<tr style='background-color:#D3D3D3'> <td> Name </td> <td> From </td> <td> Till </td> </tr>";
 
 			xhr.open("GET", url, true);
 
@@ -82,6 +91,15 @@
 		// Submit Availabillity
 		function submitAvailability() {
 
+			var name = document.getElementById("name").value;
+			
+			if(name=="")
+			{
+				console.log("Name not selected")
+				return
+			}
+				
+			
 			console.log("Submitting User")
 
 			let result = document.querySelector('.result');
