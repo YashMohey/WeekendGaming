@@ -1,2 +1,2 @@
 # WeekendGaming
-Personal Project so my friends and I can coordinate a gaming session across multiple timezones.
+Simple spring boot application to track free time across multiple timezones.
