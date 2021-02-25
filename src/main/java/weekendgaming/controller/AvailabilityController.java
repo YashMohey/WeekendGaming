@@ -4,8 +4,10 @@ import java.util.List;
 
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,16 +25,28 @@ public class AvailabilityController
 	@Autowired
 	private AvailabilityService availabilityService;
 
+	@GetMapping("/availability")
+	public List<Availability> getFutureAvailability()
+	{
+		return availabilityService.getFutureAvailability();
+	}
+	
+	@GetMapping("/availability/days/{noOfDays}")
+	public List<Availability> getFutureAvailability(@PathVariable("noOfDays") int noOfDays)
+	{
+		return availabilityService.getFutureAvailability(noOfDays);
+	}
+
 	@PostMapping("/availability")
 	public void addAvailability(@RequestBody AvailabilityDetailsRequestDTO availabilityDetails)
 	{
 		availabilityService.addAvailability(availabilityDetails);
 	}
 
-	@GetMapping("/availability")
-	public List<Availability> getFutureAvailability()
+	@DeleteMapping("/availability/{id}")
+	public void deleteAvailability(@PathVariable("id") long id)
 	{
-		return availabilityService.getFutureAvailability();
+		availabilityService.deleteAvailability(id);
 	}
 
 	@ExceptionHandler(ConstraintViolationException.class)

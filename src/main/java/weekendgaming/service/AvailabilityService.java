@@ -7,8 +7,11 @@ import weekendgaming.model.Availability;
 
 public interface AvailabilityService
 {
-	public void addAvailability(AvailabilityDetailsRequestDTO availabilityDetails);
-
 	public List<Availability> getFutureAvailability();
 
+	public List<Availability> getFutureAvailability(int noOfDays);
+
+	public void addAvailability(AvailabilityDetailsRequestDTO availabilityDetails);
+
+	public void deleteAvailability(long id);
 }
