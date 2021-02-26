@@ -24,8 +24,10 @@
 			type="button" id="btnSubmit" onclick="submitAvailability()" value="Add" />
 	</div>
 
-	<h2>Future Schedule</h2>
+	<h2>Timings</h2>
 	<p id="availabilityDetailsTable" />
+	<h2>Updates</h2>
+	<p id="availabilityDetails" />
 
 
 
@@ -36,6 +38,8 @@
 		}
 
 		function getAvailability() {
+			
+			let currDateTime = new Date();
 
 			console.log("Refreshing Availability")
 			
@@ -70,16 +74,40 @@
 								+ "</td>" + "<td>" + dateTill + "</td>" 
 								+ "<td>" + "<a href='#' onclick='deleteAvailability("+obj[index].id+")'>X</a>" + "</td>" 
 								+ "</tr>" 
+								
+						var diffStartSeconds = new Date(obj[index].availableFrom).getTime() - currDateTime.getTime();
+						console.log(diffStartSeconds)
+						
+								
+						if(diffStartSeconds/(1000 * 60 * 60 * 24)<=0)
+						{
+							availabilityDetails += obj[index].name
+							+ " is playing right now <br/>"
+						}
+						else if(diffStartSeconds/(1000 * 60 * 60 * 24)<=1)
+						{
 
-						availabilityDetails += obj[index].name
-								+ " playing from " + dateFrom + " till "
-								+ dateTill + "<br/>"
+							var remainingHrs = parseInt(diffStartSeconds/(1000 * 60 * 60));
+							var remainingMins = parseInt(diffStartSeconds/(1000 * 60)) - remainingHrs* 60 + 1;
+							
+							if(remainingMins == 60)
+							{
+								remainingHrs+=1;
+								remainingMins=0;
+							}
+							
+							
+							availabilityDetails += obj[index].name
+							+ " will be playing in "+ remainingHrs +" hours "+remainingMins+" minutes <br/><br/>"
+						}
+
+						
 					}
 
 					availabilityDetailsTable += "</table>"
 
 					console.log(availabilityDetails);
-					//document.getElementById('availabilityDetails').innerHTML = availabilityDetails;
+					document.getElementById('availabilityDetails').innerHTML = availabilityDetails;
 
 					console.log(availabilityDetailsTable);
 					document.getElementById('availabilityDetailsTable').innerHTML = availabilityDetailsTable;

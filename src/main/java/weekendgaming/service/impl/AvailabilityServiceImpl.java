@@ -2,7 +2,9 @@ package weekendgaming.service.impl;
 
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
@@ -80,6 +82,11 @@ public class AvailabilityServiceImpl implements AvailabilityService
 				response.add(availability);
 			}
 		}
+
+		// Sort the response
+		response = response.stream()
+			.sorted(Comparator.comparing(Availability::getAvailableFrom))
+			.collect(Collectors.toList());
 
 		log.info("Availability Details : " + response.toString());
 		return response;
